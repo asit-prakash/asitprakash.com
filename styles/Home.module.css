@@ -114,3 +114,8 @@
     flex-direction: column;
   }
 }
+
+
+.image {
+  border-radius: 10%;
+}
