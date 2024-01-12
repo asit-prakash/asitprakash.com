@@ -17,11 +17,13 @@ const Go: NextPage = () => {
   const [noButtonText, setNoButtonText] = useState("No :(")
 
   useEffect(() => {
+    fetch('/api/log?data=Page opened');
     console.log('Page opened')
   },[])
 
   const handleYesClick = () => {
     setSheSaidYes(true);
+    fetch('/api/log?data=Simi said yes to meet');
     console.log("Simi said yes to meet");
   };
 
@@ -30,10 +32,12 @@ const Go: NextPage = () => {
   };
 
   const handleNoClick = () => {
+    fetch('/api/log?data=Simi said no to meet');
     console.log("Simi said no to meet");
   };
 
   const handleYesHover = () => {
+    fetch('/api/log?data=yes');
     console.log('hovered on yes');
   }
 
@@ -49,6 +53,7 @@ const Go: NextPage = () => {
 
   useEffect(() => {
     if (noButtonMoving) {
+      fetch('/api/log?data=hovered on no');
       console.log('hovered on no');
       setNoButtonPosition({
         top: Math.random() * window.innerHeight,
