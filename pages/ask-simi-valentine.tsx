@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
 
 const Go: NextPage = () => {
   const [noCount, setNoCount] = useState(0);
@@ -11,12 +13,12 @@ const Go: NextPage = () => {
   const { width, height } = useWindowSize();
 
   useEffect(() => {
-    fetch('/api/log?data=Page opened valentine');
-  },[])
+    fetch("/api/log?data=Page opened valentine");
+  }, []);
 
   const handleNoClick = () => {
     setNoCount(noCount + 1);
-    fetch('/api/log?data=no for valetine');
+    fetch("/api/log?data=no for valetine");
   };
 
   const getNoButtonText = () => {
@@ -55,19 +57,21 @@ const Go: NextPage = () => {
       {yesPressed ? (
         <>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3h3M3A2OXRvM2plNzdoZHM3Z3ZpdmoxcHZyNDcxYml4NTc2ZWhrZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oEhmDMA4r9GxhwEqA/giphy.gif"
             alt="together"
+            width={500}
+            height={300}
           />
           <h2>yayyy!!!</h2>
         </>
       ) : (
         <>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            style={{ borderRadius: "5%" }}
+          <Image
+            className={styles.cat}
             src="https://media.giphy.com/media/1QfjQKX3fZ7lgrGOiE/giphy.gif?cid=790b7611ffiyclg3feedc3ttx57tnxmqdzflew56fw9hq2m3&ep=v1_gifs_search&rid=giphy.gif&ct=g"
-            width={300}
+            width={400}
             height={300}
             alt="cat"
           />
@@ -88,7 +92,7 @@ const Go: NextPage = () => {
                 fontSize: yesButtonSize,
               }}
               onClick={() => {
-                fetch('/api/log?data=yes for valentine');
+                fetch("/api/log?data=yes for valentine");
                 setYesPressed(true);
               }}
             >
@@ -125,19 +129,22 @@ const Go: NextPage = () => {
           opacity={100}
           width={width}
           height={height}
-          drawShape={ctx => {
+          drawShape={(ctx) => {
             ctx.beginPath();
             for (let i = 0; i < 22; i++) {
               const angle = 0.35 * i;
               const x = 16 * Math.pow(Math.sin(angle), 3);
-              const y = 13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle);
+              const y =
+                13 * Math.cos(angle) -
+                5 * Math.cos(2 * angle) -
+                2 * Math.cos(3 * angle) -
+                Math.cos(4 * angle);
               ctx.lineTo(x, y);
             }
-            ctx.fillStyle = 'red';  // Set the fill color to red
-            ctx.fill();             // Fill the heart with red color
+            ctx.fillStyle = "red"; // Set the fill color to red
+            ctx.fill(); // Fill the heart with red color
             ctx.closePath();
           }}
-        
         />
       ) : null}
     </div>
