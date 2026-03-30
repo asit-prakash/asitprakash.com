@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import ImpactStrip from '../components/ImpactStrip';
+import ChatPromptBar from '../components/ChatPromptBar';
 import Expertise from '../components/Expertise';
 import Experience from '../components/Experience';
 import Projects from '../components/Projects';
@@ -43,6 +44,7 @@ export default function Home() {
       <main>
         <Hero />
         <ImpactStrip />
+        <ChatPromptBar />
         <Expertise />
         <Experience />
         <Projects />

@@ -28,7 +28,7 @@ function AnimatedValue({ value, suffix, inView }: { value: number; suffix: strin
 
 const ImpactStrip = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-60px' });
+  const inView = useInView(ref, { once: true, margin: '100px' });
 
   return (
     <section id="impact" ref={ref} className="py-16 sm:py-20 relative overflow-hidden">

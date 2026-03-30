@@ -99,19 +99,9 @@ const Hero = () => {
         </motion.div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-        >
-          <HiArrowDown className="text-slate-400 text-2xl" />
-        </motion.div>
-      </motion.div>
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-fade-in-late">
+        <HiArrowDown className="text-slate-400 text-2xl animate-bounce-slow" />
+      </div>
     </section>
   );
 };

@@ -48,8 +48,8 @@ const iconLookup: Record<string, IconType> = {
 };
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35 } },
 };
 
 function SkillChip({ skill, size }: { skill: Skill; size: 'lg' | 'sm' }) {
@@ -94,7 +94,7 @@ const Skills = () => {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
+          viewport={{ once: true, margin: '50px' }}
           transition={{ staggerChildren: 0.06 }}
         >
           <motion.div variants={fadeInUp} className="mb-10">

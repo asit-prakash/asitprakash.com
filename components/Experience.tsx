@@ -4,8 +4,8 @@ import { companyExperiences } from '../data/portfolio';
 import { HiArrowUp, HiChevronDown } from 'react-icons/hi';
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35 } },
 };
 
 const Experience = () => {
@@ -17,8 +17,8 @@ const Experience = () => {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ staggerChildren: 0.1 }}
+          viewport={{ once: true, margin: '50px' }}
+          transition={{ staggerChildren: 0.06 }}
         >
           <motion.div variants={fadeInUp} className="mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">
