@@ -45,6 +45,54 @@ function useIsMobile() {
   return mobile;
 }
 
+const URL_RE = /https?:\/\/[^\s)]+/g;
+const RESUME_RE = /\[Download Resume\]\(\/resume\.pdf\)/;
+
+function renderMessageText(text: string, sender: 'user' | 'bot') {
+  if (sender === 'user') return text;
+
+  if (RESUME_RE.test(text)) {
+    const [before, after] = text.split(RESUME_RE);
+    return (
+      <>
+        {before}
+        <a
+          href="/resume.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 dark:text-blue-300 underline underline-offset-2 hover:text-blue-700 dark:hover:text-blue-200"
+        >
+          Download Resume
+        </a>
+        {after}
+      </>
+    );
+  }
+
+  const parts: (string | JSX.Element)[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  const re = new RegExp(URL_RE);
+  while ((match = re.exec(text)) !== null) {
+    if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index));
+    const url = match[0];
+    parts.push(
+      <a
+        key={match.index}
+        href={url.startsWith('http') ? url : `https://${url}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 dark:text-blue-300 underline underline-offset-2 hover:text-blue-700 dark:hover:text-blue-200"
+      >
+        {url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+      </a>,
+    );
+    lastIndex = re.lastIndex;
+  }
+  if (lastIndex < text.length) parts.push(text.slice(lastIndex));
+  return parts.length > 1 ? <>{parts}</> : text;
+}
+
 const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -128,28 +176,13 @@ const ChatBot = () => {
         <div key={msg.id}>
           <div className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div
-              className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-line ${
+              className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-line break-words ${
                 msg.sender === 'user'
                   ? 'bg-blue-600 text-white rounded-br-md'
-                  : 'bg-slate-800 text-slate-200 rounded-bl-md'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-bl-md'
               }`}
             >
-              {msg.text.includes('[Download Resume]') ? (
-                <span>
-                  {msg.text.split('[Download Resume]')[0]}
-                  <a
-                    href="/resume.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-300 underline underline-offset-2 hover:text-blue-200"
-                  >
-                    Download Resume
-                  </a>
-                  {msg.text.split('(/resume.pdf)')[1]}
-                </span>
-              ) : (
-                msg.text
-              )}
+              {renderMessageText(msg.text, msg.sender)}
             </div>
           </div>
           {msg.sender === 'bot' && msg.suggestions && (
@@ -158,7 +191,7 @@ const ChatBot = () => {
                 <button
                   key={s}
                   onClick={() => sendMessage(s)}
-                  className="text-xs px-3 py-1.5 rounded-full border border-slate-700 text-slate-400 hover:text-blue-400 hover:border-blue-500/40 hover:bg-blue-500/5 transition-all"
+                  className="text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-500/40 hover:bg-blue-500/5 transition-all"
                 >
                   {s}
                 </button>
@@ -169,10 +202,10 @@ const ChatBot = () => {
       ))}
       {isTyping && (
         <div className="flex justify-start">
-          <div className="bg-slate-800 px-4 py-3 rounded-2xl rounded-bl-md flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-slate-500 animate-bounce [animation-delay:0ms]" />
-            <span className="w-1.5 h-1.5 rounded-full bg-slate-500 animate-bounce [animation-delay:150ms]" />
-            <span className="w-1.5 h-1.5 rounded-full bg-slate-500 animate-bounce [animation-delay:300ms]" />
+          <div className="bg-slate-100 dark:bg-slate-800 px-4 py-3 rounded-2xl rounded-bl-md flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-500 animate-bounce [animation-delay:0ms]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-500 animate-bounce [animation-delay:150ms]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-500 animate-bounce [animation-delay:300ms]" />
           </div>
         </div>
       )}
@@ -181,13 +214,13 @@ const ChatBot = () => {
   );
 
   const chatHeader = (
-    <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-sm flex-shrink-0">
+    <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200/80 dark:border-slate-800/80 bg-slate-50/90 dark:bg-slate-900/90 backdrop-blur-sm flex-shrink-0">
       <div className="flex items-center gap-3">
         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-white text-xs font-bold">
           AP
         </div>
         <div>
-          <p className="text-white text-sm font-medium">Ask about Asit</p>
+          <p className="text-slate-900 dark:text-white text-sm font-medium">Ask about Asit</p>
           <p className="text-green-400 text-xs flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
             Online
@@ -196,7 +229,7 @@ const ChatBot = () => {
       </div>
       <button
         onClick={() => setIsOpen(false)}
-        className="text-slate-400 hover:text-white transition-colors p-1"
+        className="text-slate-400 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors p-1"
         aria-label="Close chat"
       >
         <HiX size={18} />
@@ -205,7 +238,7 @@ const ChatBot = () => {
   );
 
   const chatInput = (
-    <form onSubmit={handleSubmit} className="px-4 py-3 border-t border-slate-800/80 bg-slate-900/90 flex-shrink-0">
+    <form onSubmit={handleSubmit} className="px-4 py-3 border-t border-slate-200/80 dark:border-slate-800/80 bg-slate-50/90 dark:bg-slate-900/90 flex-shrink-0">
       <div className="flex items-center gap-2">
         <input
           ref={inputRef}
@@ -213,7 +246,7 @@ const ChatBot = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask me anything..."
-          className="flex-1 bg-slate-800/80 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 transition-colors"
+          className="flex-1 bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500/50 transition-colors"
         />
         <button
           type="submit"
@@ -241,7 +274,7 @@ const ChatBot = () => {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-              className="fixed inset-0 z-50 bg-slate-900 flex flex-col"
+              className="fixed inset-0 z-50 bg-white dark:bg-slate-900 flex flex-col"
             >
               {chatHeader}
               {messageList}
@@ -258,7 +291,7 @@ const ChatBot = () => {
               barVisible ? 'translate-y-0' : 'translate-y-full'
             }`}
           >
-            <div className="bg-slate-900/95 backdrop-blur-xl border-t border-slate-800/60 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+            <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-slate-200/60 dark:border-slate-800/60 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
               <form onSubmit={handleMobileBarSubmit} className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
                   AP
@@ -270,7 +303,7 @@ const ChatBot = () => {
                   onChange={(e) => setInput(e.target.value)}
                   onFocus={() => setIsOpen(true)}
                   placeholder="Ask about Asit..."
-                  className="flex-1 bg-slate-800/80 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 transition-colors"
+                  className="flex-1 bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500/50 transition-colors"
                 />
                 <button
                   type="submit"
@@ -300,7 +333,7 @@ const ChatBot = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="fixed bottom-24 right-6 z-50 w-[400px] h-[520px] bg-slate-900 border border-slate-700/50 rounded-2xl shadow-2xl shadow-black/40 flex flex-col overflow-hidden"
+            className="fixed bottom-24 right-6 z-50 w-[400px] h-[520px] bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-700/50 rounded-2xl shadow-2xl shadow-black/40 flex flex-col overflow-hidden"
           >
             {chatHeader}
             {messageList}

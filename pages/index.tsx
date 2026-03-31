@@ -7,9 +7,11 @@ import Expertise from '../components/Expertise';
 import Experience from '../components/Experience';
 import Projects from '../components/Projects';
 import Skills from '../components/Skills';
+import Recommendations from '../components/Recommendations';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 import ChatBot from '../components/ChatBot';
+import CursorGlow from '../components/CursorGlow';
 
 export default function Home() {
   return (
@@ -39,6 +41,7 @@ export default function Home() {
         />
       </Head>
 
+      <CursorGlow />
       <Navbar />
 
       <main>
@@ -49,6 +52,7 @@ export default function Home() {
         <Experience />
         <Projects />
         <Skills />
+        <Recommendations />
         <Contact />
       </main>
 

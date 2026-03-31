@@ -41,7 +41,7 @@ const ChatPromptBar = () => {
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
               </svg>
             </div>
-            <span className="text-slate-300 text-sm sm:text-base font-medium group-hover:text-white transition-colors">
+            <span className="text-slate-500 dark:text-slate-300 text-sm sm:text-base font-medium group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
               Curious about me? Ask anything
             </span>
             <svg
@@ -67,7 +67,7 @@ const ChatPromptBar = () => {
                   e.stopPropagation();
                   openChat(prompt);
                 }}
-                className="text-xs px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/5 text-blue-300/80 hover:text-blue-300 hover:border-blue-400/40 hover:bg-blue-500/10 transition-all duration-200 cursor-pointer"
+                className="text-xs px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/5 text-blue-500 dark:text-blue-300/80 hover:text-blue-600 dark:hover:text-blue-300 hover:border-blue-400/40 hover:bg-blue-500/10 transition-all duration-200 cursor-pointer"
               >
                 {prompt}
               </span>

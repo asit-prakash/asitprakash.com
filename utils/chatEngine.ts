@@ -5,6 +5,8 @@ import {
   featuredProjects,
   education,
   certifications,
+  recommendations,
+  recommendationsLink,
 } from '../data/portfolio';
 
 export interface ChatResponse {
@@ -333,6 +335,15 @@ const topicResponses = {
     text: `Asit's certifications include:\n\n${certifications.map((c) => `• ${c}`).join('\n')}`,
     suggestions: ['Education?', 'Skills?', 'Work experience?'],
   }),
+  recommendations: (): ChatResponse => {
+    const recSummary = recommendations
+      .map((r) => `• ${r.name} (${r.title.split('|')[0].trim()}): "${r.text.substring(0, 100)}..."`)
+      .join('\n\n');
+    return {
+      text: `Asit has received glowing recommendations from colleagues and managers:\n\n${recSummary}\n\nView all on LinkedIn → ${recommendationsLink}`,
+      suggestions: ['Who is Edward Chen?', 'His strengths?', 'Contact Asit'],
+    };
+  },
   contact: (): ChatResponse => ({
     text: `You can reach Asit at:\n\n• Email: ${personalInfo.email}\n• LinkedIn: linkedin.com/in/asitprakash\n• GitHub: github.com/asit-prakash\n• Twitter: @asitprksh\n\nHe's always open to discussing new opportunities and interesting projects!`,
     suggestions: ['What does Asit do?', 'His skills?', 'Download resume'],
@@ -441,6 +452,7 @@ const topics: Record<string, TopicDef> = {
   projects:       { keywords: ['project', 'projects', 'built', 'build', 'made', 'portfolio', 'product', 'created', 'developed', 'shipped', 'delivered'], respond: topicResponses.projects },
   education:      { keywords: ['education', 'degree', 'university', 'college', 'study', 'studied', 'btech', 'school', 'academic', 'graduated', 'qualification', 'alumni', 'institute', 'engineering'], respond: topicResponses.education },
   certifications: { keywords: ['certification', 'certificate', 'certified', 'course', 'courses', 'training', 'bootcamp', 'mern', 'blockchain'], respond: topicResponses.certifications },
+  recommendations: { keywords: ['recommendation', 'recommendations', 'testimonial', 'testimonials', 'endorsement', 'endorse', 'reference', 'references', 'review', 'reviews', 'vouch', 'say', 'said', 'feedback', 'colleague', 'coworker'], respond: topicResponses.recommendations },
   contact:        { keywords: ['contact', 'email', 'reach', 'connect', 'message', 'touch', 'mail', 'linkedin', 'github', 'twitter', 'social'], respond: topicResponses.contact },
   location:       { keywords: ['location', 'live', 'based', 'city', 'country', 'located', 'bangalore', 'bengaluru', 'india', 'kolkata', 'place'], respond: topicResponses.location },
   resume:         { keywords: ['resume', 'cv', 'download'], respond: topicResponses.resume },
@@ -486,6 +498,9 @@ const phrasePatterns: [RegExp, string][] = [
   [/(?:this (?:website|portfolio|site)|how .* this .* built|built with what)/, 'websiteStack'],
   [/(?:which|what) (?:industr|domain|sector|field|vertical)/, 'industries'],
   [/(?:achievement|accomplishment|biggest impact|notable .* result)/, 'achievements'],
+  [/(?:what .* (?:people|colleagues|coworkers|managers?) (?:say|think|wrote))/, 'recommendations'],
+  [/(?:recommendation|testimonial|endorsement|reference|review)/, 'recommendations'],
+  [/(?:who (?:recommend|vouch|endorse))/, 'recommendations'],
   [/(?:problem solv|debug|troubleshoot|biggest challenge)/, 'problemSolving'],
   [/(?:artificial intelligence|machine learning|llm|ai .* work|ai .* experience)/, 'ai'],
   [/(?:lead|leader|leadership|mentor|team .* manage|manage .* team)/, 'leadership'],
